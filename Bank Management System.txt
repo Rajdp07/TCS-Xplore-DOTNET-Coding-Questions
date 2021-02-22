@@ -1,0 +1,99 @@
+Bank Management System:-
+
+--------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+namespace Solution
+{
+    class program
+    {
+      static void Main(string[] args)
+      {
+          BusManagement manager=new BusManagement();
+          int n=Convert.ToInt32(Console.ReadLine());
+          for(int i=0;i<n;i++)
+          {
+              int number=Convert.ToInt32(Console.ReadLine());
+              string state=Console.ReadLine();
+              string type=Console.ReadLine();
+              int price=Convert.ToInt32(Console.ReadLine());
+              manager.buses.Add(new Bus(number,state,type,price));
+          }
+              int choice=Convert.ToInt32(Console.ReadLine());
+              #region solution1
+              switch(choice)
+              {
+                case 1:
+                    string sstate=Console.ReadLine();
+                    List<Bus> list=manager.SameStateBuses(sstate);
+                    if(list.Count==0)
+                    {
+                        Console.WriteLine("No bus found with given state");
+                        break;
+                    }
+                    foreach(Bus p in list)
+                    {
+                     Console.WriteLine("{0}:{1},{2}",p.Number,p.Type,p.Price);
+                    }
+                    break;
+                case 2:
+                    int discount=Convert.ToInt32(Console.ReadLine());
+                    List<Bus> temp=manager.FindDiscountBuses(discount);
+                    foreach(Bus c in temp)
+                    {
+                    if(c.Type.ToLower()=="Public".ToLower())
+                     {
+                      c.Price=(c.Price-(c.Price*(discount+5)/100));
+                     }
+                    if(c.Type.ToLower()=="Private".ToLower())
+                     {
+                     c.Price=(c.Price-(c.Price*discount/100));
+                     }
+                    }
+                    foreach(Bus q in temp)
+                    {
+                        
+                        Console.WriteLine("{0}:{1},{2}",q.Number,q.Type,q.Price); 
+                    }
+                    break;                
+                }
+              #endregion
+          }
+      }
+      #region solution2
+      class Bus
+      {
+          public int Number { get; set; }
+          public string State { get; set; }
+          public string Type { get; set; }
+          public int Price { get; set; }
+          public Bus(int number, string state,string type,int price)
+          {
+              Number=number;
+              State=state;
+              Type=type;
+              Price=price;
+          }
+      }
+      #endregion
+      #region solution3
+      class BusManagement
+      {
+          public List<Bus> buses=new List<Bus>();
+          public List<Bus> SameStateBuses(string ssstate)
+          {
+              List<Bus> res=new List<Bus>();
+              res=buses.Where(x => x.State.ToLower()==ssstate.ToLower()).OrderBy(a=>a.Number).ToList();
+              return res;
+          }
+          
+          public List<Bus> FindDiscountBuses(int ddiscount)
+          {
+              List<Bus> result=new List<Bus>();
+              result=buses.OrderBy(a=>a.Number).ToList();
+              return result;
+          }
+        }
+      #endregion
+    }

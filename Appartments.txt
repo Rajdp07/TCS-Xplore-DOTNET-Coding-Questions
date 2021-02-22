@@ -1,0 +1,165 @@
+ToastMasrter Management:-
+
+Input 1:------
+4
+Chennai
+Member
+11
+5
+Chennai
+Host
+10
+6
+Chennai
+Host
+15
+5
+CHENNAI
+Host
+16
+3
+1
+Chennai
+
+Output:------
+
+Total Count is :3
+-----------------------------
+Input 2:---
+
+4
+Kolkata
+Host
+9
+4
+Mumbai
+Member
+10
+3
+Mumbai
+Host
+15
+5
+Trivandrum
+Host
+15
+5
+Trivandrum
+Host
+12
+5
+2
+Host
+
+Output:-------
+
+1001-Kolkata
+1003-Mumbai
+1004-Trivandrum
+--------------------------------------------------------
+
+Source Code:-
+
+
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+namespace CPA
+{
+    class Program
+    {
+        public static void Main(string[] args)
+        {
+            ToastMasterManagement manager = new ToastMasterManagement();
+            int n = int.Parse(Console.ReadLine());
+            while (n > 0)
+            {
+                string location = Console.ReadLine();
+                string type = Console.ReadLine();
+                int noofevents = int.Parse(Console.ReadLine());
+                int noofyears = int.Parse(Console.ReadLine());
+                manager.toastmasters.Add(new ToastMaster(location, type, noofevents, noofyears));
+                n--;
+            }
+            int choice = int.Parse(Console.ReadLine());
+            switch(choice)
+            {
+                case 1:
+                    string loc = Console.ReadLine();
+                    int cnt = manager.ToastMastercountByLocation(loc);
+                    if (cnt == 0)
+                    {
+                        Console.WriteLine("There are no toastmaster with the given location");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Total Count is :" + cnt);
+                    }
+                    break;
+                case 2:
+                    string tpe = Console.ReadLine();
+                    Dictionary<int,string> tmp = manager.ToastMasterByType(tpe);
+                    if (tmp.Count() == 0)
+                    {
+                        Console.WriteLine("There are no toatmaster with the given type");
+                    }
+                    else
+                    {
+                        foreach(var i in tmp)
+                        {
+                            Console.WriteLine($"{i.Key}-{i.Value}");
+                        }
+                    }
+                    break;
+            }
+            Console.ReadKey();
+        }
+        class ToastMaster
+        {
+            static int autoid = 1000;
+            public int ToastMasterid;
+            public string Location { get; set; }
+            public string Type { get; set; }
+            public int Noofevents { get; set; }
+            public int Noofyears { get; set; }
+            public ToastMaster(string Location,string Type,int Noofevents,int Nooyears)
+            {
+                autoid = autoid + 1;
+                ToastMasterid = autoid;
+                this.Location = Location;
+                this.Type = Type;
+                this.Noofevents = Noofevents;
+                this.Noofyears = Noofyears;
+            }
+        }
+        class ToastMasterManagement
+        {
+            public List<ToastMaster> toastmasters = new List<ToastMaster>();
+            public int ToastMastercountByLocation(string loc)
+            {
+                int count = 0;
+                foreach(ToastMaster i in toastmasters.FindAll(s => s.Location.ToUpper().Equals(loc.ToUpper())))
+                {
+                    if (i.Noofevents > 10)
+                    {
+                        count = count + 1;
+                    }
+                }
+                return count;
+            }
+            public Dictionary<int,string> ToastMasterByType(string tp)
+            {
+                Dictionary<int, string> temp = new Dictionary<int, string>();
+                
+                foreach(ToastMaster j in toastmasters.FindAll(s => s.Type.ToUpper().Equals(tp.ToUpper())))
+                {
+                    temp.Add(j.ToastMasterid,j.Location);
+                }
+                return temp;
+            }
+        }
+    }
+}
+

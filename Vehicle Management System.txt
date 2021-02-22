@@ -1,0 +1,95 @@
+Vehicle Management System:-
+----------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+namespace Solution
+{
+    class program
+    {
+      static void Main(string[] args)
+      {
+          TollPlazaManagement manager=new TollPlazaManagement();
+          int n=Convert.ToInt32(Console.ReadLine());
+          for(int i=0;i<n;i++)
+          {
+              string vehicle_id=Console.ReadLine();
+              string vehicle_type=Console.ReadLine();
+              string modeof_payment=Console.ReadLine();
+              double fare=Convert.ToDouble(Console.ReadLine());
+              manager.vehicles.Add(new Vehicle(vehicle_id,vehicle_type,modeof_payment,fare));
+          }
+              int choice=Convert.ToInt32(Console.ReadLine());
+              #region solution1
+              switch(choice)
+              {
+                case 1:
+                    string payment=Console.ReadLine();
+                    double total=manager.GetPaymentModeWiseCollection(payment);
+                    if(total==0)
+                    {
+                        Console.WriteLine("There are no vehicle with the given payment mode");
+                        break;
+                    }
+                    Console.WriteLine("Total collection is:"+total);
+                    break;
+                case 2:
+                    string type=Console.ReadLine();
+                    List<Vehicle> list=manager.FindVehicleBasedOnType(type);
+                    if(list.Count==0)
+                    {
+                        Console.WriteLine("No such vehicle type is found");
+                        break;
+                    }
+                    foreach(Vehicle p in list)
+                    {
+                        Console.WriteLine("{0}:{1}:{2}:{3}",p.Vehicle_Id,p.Vehicle_Type,p.ModeOf_Payment,p.Fare);
+                    }
+                    break;
+              }
+              #endregion
+          }
+      }
+      #region solution2
+      class Vehicle
+      {
+          public string Vehicle_Id { get; set; }
+          public string Vehicle_Type { get; set; }
+          public string ModeOf_Payment { get; set; }
+          public double Fare { get; set; }
+          public Vehicle(string vehicleId, string type,string payment,double fare)
+          {
+              Vehicle_Id=vehicleId;
+              Vehicle_Type=type;
+              ModeOf_Payment=payment;
+              Fare=fare;
+          }
+      }
+      #endregion
+      #region solution3
+      class TollPlazaManagement
+      {
+          public List<Vehicle> vehicles=new List<Vehicle>();
+          public double GetPaymentModeWiseCollection(string payment)
+          {
+              double total=0;
+              foreach (Vehicle p in vehicles)
+              {
+                  if(p.ModeOf_Payment.ToLower().Equals(payment.ToLower()))
+                  {
+                      total=total+p.Fare;
+                  }
+              }
+              return total;
+          }
+          public List<Vehicle> FindVehicleBasedOnType(string type)
+          {
+              List<Vehicle> res=new List<Vehicle>();
+              res=vehicles.Where(x => x.Vehicle_Type.ToLower()==type.ToLower()).OrderBy(a=>a.Vehicle_Id).ToList();
+              return res;
+          }
+        }
+      
+      #endregion
+      }

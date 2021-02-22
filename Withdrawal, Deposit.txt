@@ -1,0 +1,33 @@
+Deposit Withdrawal:----
+
+------------------------------------------
+using System;
+namespace Solution
+{
+    class program
+    {
+        static void Main(string[] args)
+        {
+            int customerid=Convert.ToInt32(Console.ReadLine());
+            string name=Console.ReadLine();
+            int balance=Convert.ToInt16(Console.ReadLine());
+            string type=Console.ReadLine();
+            int amount=Convert.ToInt16(Console.ReadLine());
+            if(type.ToLower()=="deposit")
+            {
+                balance=balance+amount;
+                Console.WriteLine("{0}-{1}-{2}",customerid,name,balance);
+            }
+            else if(type.ToLower()=="withdraw")
+            {
+                balance=balance+amount;
+                if(balance>=0)
+                 Console.WriteLine("{0}-{1}-{2}",customerid,name,balance);
+                else
+                  Console.WriteLine("insufficient balance");
+            }
+            else
+             Console.WriteLine("Data Invalid");
+        }
+    }
+}
